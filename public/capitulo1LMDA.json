@@ -1,0 +1,102 @@
+[
+  {
+    "question": "¿Cuál fue la principal adaptación que hizo Peter Backus a la ecuación de Drake para aplicarla a su vida personal?",
+    "options": [
+      "Reemplazar la tasa de formación estelar por la tasa de matrimonios en Londres.",
+      "Sustituir factores astrofísicos por criterios personales para estimar posibles parejas.",
+      "Ajustar la probabilidad de vida extraterrestre con datos de biología humana.",
+      "Incorporar variables económicas al modelo de Drake."
+    ],
+    "correct": "Sustituir factores astrofísicos por criterios personales para estimar posibles parejas."
+  },
+  {
+    "question": "La técnica de descomponer un problema complejo en estimaciones sucesivas que se compensan entre sí se conoce como:",
+    "options": [
+      "Aproximación de Monte Carlo.",
+      "Teoría de la decisión racional.",
+      "Estimación de Fermi.",
+      "Método de mínimos cuadrados."
+    ],
+    "correct": "Estimación de Fermi."
+  },
+  {
+    "question": "Según el cálculo de Backus, ¿qué resultado sorprendente obtuvo al comparar la cantidad de posibles parejas con la de civilizaciones extraterrestres?",
+    "options": [
+      "Tenía más posibles parejas que alienígenas.",
+      "Había más alienígenas que potenciales novias.",
+      "Ambos valores eran exactamente iguales.",
+      "No existía base matemática para comparar ambos fenómenos."
+    ],
+    "correct": "Había más alienígenas que potenciales novias."
+  },
+  {
+    "question": "¿Qué factor de la estimación de Backus podía multiplicar por cuatro sus probabilidades de encontrar pareja si se flexibilizaba?",
+    "options": [
+      "Que su pareja viviera en Londres.",
+      "Que tuviera estudios universitarios.",
+      "Que fuera mayor de 30 años.",
+      "Que compartiera su gusto por las matemáticas."
+    ],
+    "correct": "Que tuviera estudios universitarios."
+  },
+  {
+    "question": "En la metodología de Backus, ¿qué criterio se considera altamente restrictivo y reduce dramáticamente el número de posibles parejas?",
+    "options": [
+      "Nivel educacional.",
+      "La lista extensa de “deal-breakers” en citas en línea.",
+      "Diferencia de edad superior a 5 años.",
+      "Uso de redes sociales."
+    ],
+    "correct": "La lista extensa de “deal-breakers” en citas en línea."
+  },
+  {
+    "question": "¿Por qué la ecuación de Drake y la adaptación de Backus ilustran la utilidad del pensamiento matemático aplicado?",
+    "options": [
+      "Porque garantizan resultados exactos y verificables.",
+      "Porque permiten estimar fenómenos imposibles de verificar directamente.",
+      "Porque eliminan toda subjetividad de las decisiones humanas.",
+      "Porque reducen cualquier problema a un único valor determinista."
+    ],
+    "correct": "Porque permiten estimar fenómenos imposibles de verificar directamente."
+  },
+  {
+    "question": "¿Cuál es el principal riesgo de aplicar criterios excesivos o triviales en la búsqueda de pareja según el capítulo?",
+    "options": [
+      "Mejorar la calidad promedio de los candidatos.",
+      "Obtener un número de candidatos cercano a cero.",
+      "Aumentar la probabilidad de compatibilidad cultural.",
+      "Generar mayor estabilidad a largo plazo."
+    ],
+    "correct": "Obtener un número de candidatos cercano a cero."
+  },
+  {
+    "question": "¿Qué enseñanza práctica destaca Fry al analizar los resultados de Backus?",
+    "options": [
+      "Que conviene mantener criterios rígidos para asegurar compatibilidad.",
+      "Que abrirse a más posibilidades aumenta sustancialmente la probabilidad de éxito.",
+      "Que las matemáticas solo sirven como entretenimiento en el amor.",
+      "Que el azar es más confiable que cualquier cálculo."
+    ],
+    "correct": "Que abrirse a más posibilidades aumenta sustancialmente la probabilidad de éxito."
+  },
+  {
+    "question": "¿Cómo se relaciona la lógica de la ecuación de Drake con la búsqueda de pareja humana?",
+    "options": [
+      "Ambos dependen exclusivamente de experimentación empírica.",
+      "En ambos casos se multiplican probabilidades parciales de distintos factores.",
+      "La ecuación de Drake se basa en variables sociales idénticas a las humanas.",
+      "La búsqueda de pareja no puede descomponerse en pasos."
+    ],
+    "correct": "En ambos casos se multiplican probabilidades parciales de distintos factores."
+  },
+  {
+    "question": "¿Qué conclusión final ofrece el capítulo sobre la utilidad de las matemáticas en la vida amorosa?",
+    "options": [
+      "Que las matemáticas sustituyen completamente a la experiencia personal.",
+      "Que las matemáticas son inútiles en fenómenos emocionales.",
+      "Que las matemáticas ofrecen patrones útiles aun con limitaciones.",
+      "Que la matemática es superior a la psicología en comprender el amor."
+    ],
+    "correct": "Que las matemáticas ofrecen patrones útiles aun con limitaciones."
+  }
+]

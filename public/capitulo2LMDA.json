@@ -1,0 +1,102 @@
+[
+  {
+    "question": "Según el capítulo, ¿por qué la obsesión cultural con la belleza no puede considerarse un mero error colectivo de percepción?",
+    "options": [
+      "Porque la belleza siempre ha sido un valor económico en las sociedades.",
+      "Porque su universalidad histórica sugiere raíces evolutivas más profundas.",
+      "Porque la religión la impuso como un ideal universal.",
+      "Porque depende únicamente de convenciones sociales modernas."
+    ],
+    "correct": "Porque su universalidad histórica sugiere raíces evolutivas más profundas."
+  },
+  {
+    "question": "¿Qué problema metodológico enfrenta la aplicación de la proporción áurea al análisis de rostros humanos?",
+    "options": [
+      "La falta de instrumentos de medición digital.",
+      "La subjetividad en la definición de los límites anatómicos.",
+      "La imposibilidad matemática de calcular raíces cuadradas en rostros.",
+      "La variabilidad genética que impide mediciones proporcionales."
+    ],
+    "correct": "La subjetividad en la definición de los límites anatómicos."
+  },
+  {
+    "question": "Según Keith Devlin, el uso del número áureo como definición de belleza debe considerarse:",
+    "options": [
+      "Una teoría sólida en espera de más evidencia.",
+      "Una aplicación válida de la geometría a la biología.",
+      "Un mito persistente sin fundamento científico.",
+      "Una aproximación útil aunque incompleta."
+    ],
+    "correct": "Un mito persistente sin fundamento científico."
+  },
+  {
+    "question": "¿Cuál es la razón evolutiva propuesta para que los rostros promedio resulten más atractivos?",
+    "options": [
+      "Porque reflejan estabilidad emocional.",
+      "Porque reducen el riesgo de mutaciones genéticas perjudiciales.",
+      "Porque se asocian a un mayor estatus social.",
+      "Porque coinciden con las proporciones artísticas clásicas."
+    ],
+    "correct": "Porque reducen el riesgo de mutaciones genéticas perjudiciales."
+  },
+  {
+    "question": "La atracción hacia rostros simétricos está vinculada principalmente a:",
+    "options": [
+      "Señales subliminales de buena salud.",
+      "Preferencias aprendidas en la infancia.",
+      "Influencias culturales en la percepción visual.",
+      "Estándares estéticos fijados por la publicidad."
+    ],
+    "correct": "Señales subliminales de buena salud."
+  },
+  {
+    "question": "¿Qué rasgos faciales femeninos se destacan como indicadores universales de altos niveles de estrógeno y fertilidad?",
+    "options": [
+      "Nariz alargada y cejas gruesas.",
+      "Pómulos grandes y mandíbula ancha.",
+      "Ojos grandes, labios carnosos y mentón estrecho.",
+      "Frente amplia y cejas bajas."
+    ],
+    "correct": "Ojos grandes, labios carnosos y mentón estrecho."
+  },
+  {
+    "question": "En el caso de los hombres, ¿qué características se relacionan con niveles elevados de testosterona y, por ende, con atractivo?",
+    "options": [
+      "Nariz recta y cabello grueso.",
+      "Mandíbula definida y arcos superciliares marcados.",
+      "Piel clara y labios finos.",
+      "Proporción áurea en el rostro."
+    ],
+    "correct": "Mandíbula definida y arcos superciliares marcados."
+  },
+  {
+    "question": "¿Qué hallazgo contradice la idea de que solo la simetría facial predice belleza en la vida real?",
+    "options": [
+      "La preferencia por rasgos ligeramente asimétricos que transmiten sinceridad.",
+      "El hecho de que todas las culturas valoren la misma proporción áurea.",
+      "Que la gente percibe belleza solo en rostros masculinos.",
+      "Que los rasgos asimétricos se asocien con bajo estatus social."
+    ],
+    "correct": "La preferencia por rasgos ligeramente asimétricos que transmiten sinceridad."
+  },
+  {
+    "question": "Según la evidencia citada, ¿cómo influyen las preferencias de personalidad en la percepción de atractivo facial?",
+    "options": [
+      "No tienen correlación medible con rasgos físicos.",
+      "Se reflejan en elecciones faciales congruentes con el carácter buscado.",
+      "Contradicen las elecciones evolutivas relacionadas con fertilidad.",
+      "Dependen exclusivamente de experiencias de la niñez."
+    ],
+    "correct": "Se reflejan en elecciones faciales congruentes con el carácter buscado."
+  },
+  {
+    "question": "¿Qué efecto describe Dan Ariely que puede manipular la percepción de belleza al comparar rostros?",
+    "options": [
+      "El sesgo de confirmación.",
+      "El efecto halo.",
+      "El efecto señuelo (decoy effect).",
+      "El principio de rareza."
+    ],
+    "correct": "El efecto señuelo (decoy effect)."
+  }
+]
