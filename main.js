@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div id="menu-container" class="menu-container">
         <header class="menu-header">
           <h1 class="app-title">Questionary</h1>
+          <div class="menu-balance">Dabloons: <span id="menu-dabloons">0</span></div>
         </header>
         <main class="menu-content">
           <div class="menu-section">
@@ -25,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="menu-grid">
             <button id="settings-button" class="secondary">Configuración</button>
             <button id="stats-button" class="secondary">Progreso / Puntuación</button>
+            <button id="store-button" class="secondary">Tienda</button>
             <button id="tutorial-button" class="secondary">Cómo jugar</button>
             <button id="exit-button" class="secondary">Salir</button>
           </div>
@@ -35,9 +37,33 @@ document.addEventListener("DOMContentLoaded", () => {
               <li>Mejor puntaje: <span id="stat-highscore">0</span></li>
               <li>Partidas jugadas: <span id="stat-games">0</span></li>
               <li>Porcentaje de aciertos: <span id="stat-accuracy">0%</span></li>
+              <li>Dabloons: <span id="stat-dabloons">0</span></li>
             </ul>
           </div>
         </main>
+      </div>
+
+      <div id="store-container" class="panel" style="display:none;">
+        <h2>Tienda</h2>
+        <ul id="store-items" style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">
+          <li style="display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;border-radius:12px;padding:12px;">
+            <div>
+              <strong>Cámara</strong>
+              <div>Precio: 100 dabloons</div>
+            </div>
+            <button id="buy-camera" class="primary" data-item="camera" data-price="100">Comprar</button>
+          </li>
+          <li style="display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;border-radius:12px;padding:12px;">
+            <div>
+              <strong>Caramelo</strong>
+              <div>Precio: 10 dabloons</div>
+            </div>
+            <button id="buy-candy" class="primary" data-item="candy" data-price="10">Comprar</button>
+          </li>
+        </ul>
+        <div class="settings-actions">
+          <button id="store-back" class="secondary">Volver</button>
+        </div>
       </div>
 
       <div id="settings-container" class="panel" style="display:none;">
@@ -133,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </tbody>
         </table>
         <button id="restart-button">Restart Quiz</button>
+        <button id="home-button" class="secondary">Inicio</button>
       </div>
       <div id="popup-modal" class="modal">
         <main class="popup-card">
@@ -147,7 +174,19 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentQuestionIndex = 0;
   let score = 0;
   let timerInterval;
+  let quizStartTime = 0;
+  let answeredThisQuestion = false;
+  const questionTimes = [];
   const userAnswers = [];
+
+  function formatSecondsToMMSS(totalSeconds) {
+    const sec = Math.max(0, Math.floor(totalSeconds));
+    const minutes = Math.floor(sec / 60);
+    const seconds = sec % 60;
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(seconds).padStart(2, '0');
+    return `${mm}:${ss}`;
+  }
 
   // Views / Menu elements
   const menuContainer = document.getElementById("menu-container");
@@ -155,8 +194,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const categorySelect = document.getElementById("category-select");
   const settingsButton = document.getElementById("settings-button");
   const statsButton = document.getElementById("stats-button");
+  const storeButton = document.getElementById("store-button");
   const tutorialButton = document.getElementById("tutorial-button");
   const exitButton = document.getElementById("exit-button");
+  const menuDabloons = document.getElementById("menu-dabloons");
 
   const settingsContainer = document.getElementById("settings-container");
   const languageSelect = document.getElementById("language-select");
@@ -173,6 +214,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const statHighscore = document.getElementById("stat-highscore");
   const statGames = document.getElementById("stat-games");
   const statAccuracy = document.getElementById("stat-accuracy");
+  const statDabloons = document.getElementById("stat-dabloons");
+
+  const storeContainer = document.getElementById("store-container");
+  const storeBack = document.getElementById("store-back");
+  const buyCamera = document.getElementById("buy-camera");
+  const buyCandy = document.getElementById("buy-candy");
 
   // Quiz elements
   const quizContainer = document.getElementById("quiz-container");
@@ -186,6 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const scoreboardContainer = document.getElementById("scoreboard-container");
   const scoreboardBody = document.querySelector("#scoreboard tbody");
   const restartButton = document.getElementById("restart-button");
+  const homeButton = document.getElementById("home-button");
   const popupModal = document.getElementById("popup-modal");
   const popupContent = document.getElementById("popup-content");
   const popupButton = document.getElementById("popup-button");
@@ -195,9 +243,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const SETTINGS_KEY = 'qa_settings_v1';
   const STATS_KEY = 'qa_stats_v1';
   let currentMode = '/data.json';
+  let appStats;
 
   const defaultSettings = { language: 'es', difficulty: 'normal', volume: 70, reducedMotion: false };
-  const defaultStats = { highScore: 0, gamesPlayed: 0, correctTotal: 0, answeredTotal: 0 };
+  const defaultStats = { highScore: 0, gamesPlayed: 0, correctTotal: 0, answeredTotal: 0, dabloons: 0 };
 
   function loadSettings() {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -239,6 +288,18 @@ document.addEventListener("DOMContentLoaded", () => {
     statGames.textContent = String(stats.gamesPlayed);
     const accuracy = stats.answeredTotal > 0 ? Math.round((stats.correctTotal / stats.answeredTotal) * 100) : 0;
     statAccuracy.textContent = `${accuracy}%`;
+    if (statDabloons) statDabloons.textContent = String(stats.dabloons ?? 0);
+    updateMenuDabloons(stats);
+  }
+
+  function updateMenuDabloons(stats) {
+    if (menuDabloons) menuDabloons.textContent = String((stats?.dabloons) ?? 0);
+  }
+
+  function addDabloons(amount) {
+    appStats = appStats || loadStats();
+    appStats.dabloons = (appStats.dabloons ?? 0) + amount;
+    saveStats(appStats);
   }
 
   function applyReducedMotion(enabled) {
@@ -331,6 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     optionsContainer.innerHTML = "";
     const shuffledOptions = shuffleArray([...currentQuestion.options]);
+    answeredThisQuestion = false;
     shuffledOptions.forEach((option) => {
       const label = document.createElement("label");
       const input = document.createElement("input");
@@ -358,6 +420,17 @@ document.addEventListener("DOMContentLoaded", () => {
     //resetTimer();
   }
 
+  function startQuizTimer() {
+    clearInterval(timerInterval);
+    quizStartTime = Date.now();
+    if (timerElement) timerElement.style.visibility = 'visible';
+    if (timerElement) timerElement.textContent = '00:00';
+    timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+      if (timerElement) timerElement.textContent = formatSecondsToMMSS(elapsed);
+    }, 1000);
+  }
+
   function updateProgressBar() {
     const progress = (currentQuestionIndex + 1) / quizData.length * 100;
     //const progress = (currentQuestionIndex / quizData.length) * 100;
@@ -371,7 +444,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isCorrect) {
       score++;
+      addDabloons(10);
       scoreElement.textContent = `Score: ${score}`;
+      if (!answeredThisQuestion) {
+        const elapsedSec = Math.floor((Date.now() - quizStartTime) / 1000);
+        questionTimes.push(elapsedSec);
+        answeredThisQuestion = true;
+      }
       currentQuestionIndex++;
       if (currentQuestionIndex < quizData.length) {
         loadQuestion();
@@ -379,6 +458,11 @@ document.addEventListener("DOMContentLoaded", () => {
         displayResults();
       } 
     } else{
+      if (!answeredThisQuestion) {
+        const elapsedSec = Math.floor((Date.now() - quizStartTime) / 1000);
+        questionTimes.push(elapsedSec);
+        answeredThisQuestion = true;
+      }
       popupContent.innerHTML = isCorrect
       ? `<p>¡Correcto! La respuesta es: ${currentQuestion.correct}</p>`
       : `<p>Incorrecto. La respuesta correcta es: ${currentQuestion.correct}</p>`;
@@ -435,6 +519,11 @@ document.addEventListener("DOMContentLoaded", () => {
       'input[name="answer"]:checked'
     );
     if (selectedOption) {
+      if (!answeredThisQuestion) {
+        const elapsedSec = Math.floor((Date.now() - quizStartTime) / 1000);
+        questionTimes.push(elapsedSec);
+        answeredThisQuestion = true;
+      }
       userAnswers.push({
         question: quizData[currentQuestionIndex].question,
         yourAnswer: selectedOption.value,
@@ -443,9 +532,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (selectedOption.value === quizData[currentQuestionIndex].correct) {
         score++;
+        addDabloons(10);
         scoreElement.textContent = `Score: ${score}`;
       }
     } else {
+      if (!answeredThisQuestion) {
+        const elapsedSec = Math.floor((Date.now() - quizStartTime) / 1000);
+        questionTimes.push(elapsedSec);
+        answeredThisQuestion = true;
+      }
       userAnswers.push({
         question: quizData[currentQuestionIndex].question,
         yourAnswer: "No answer selected",
@@ -473,22 +568,50 @@ document.addEventListener("DOMContentLoaded", () => {
     questionTextElement.textContent = `Your score is ${score}/${quizData.length}`;
 
     // update stats
-    const stats = loadStats();
+    appStats = appStats || loadStats();
     const answeredNow = userAnswers.length;
     const correctNow = userAnswers.filter(a => a.yourAnswer === a.correctAnswer).length;
-    const newHigh = Math.max(stats.highScore, score);
+    const newHigh = Math.max(appStats.highScore, score);
     const newStats = {
-      ...stats,
+      ...appStats,
       highScore: newHigh,
-      gamesPlayed: stats.gamesPlayed + 1,
-      correctTotal: stats.correctTotal + correctNow,
-      answeredTotal: stats.answeredTotal + answeredNow,
+      gamesPlayed: appStats.gamesPlayed + 1,
+      correctTotal: appStats.correctTotal + correctNow,
+      answeredTotal: appStats.answeredTotal + answeredNow,
     };
-    saveStats(newStats);
+    appStats = newStats;
+    saveStats(appStats);
 
     optionsContainer.innerHTML = "";
     nextButton.style.display = "none";
     scoreboardContainer.style.display = "block";
+    // Ensure scoreboard has a Time column and show average
+    const theadRow = document.querySelector('#scoreboard thead tr');
+    if (theadRow && theadRow.children.length === 3) {
+      const th = document.createElement('th');
+      th.textContent = 'Time (s)';
+      theadRow.appendChild(th);
+    }
+    // Compute totals and averages
+    const totalElapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+    const avgSeconds = questionTimes.length > 0 ? Math.round((totalElapsed / questionTimes.length) * 100) / 100 : 0;
+    let avgEl = document.getElementById('avg-time');
+    if (!avgEl) {
+      avgEl = document.createElement('div');
+      avgEl.id = 'avg-time';
+      avgEl.style.marginTop = '8px';
+      scoreboardContainer.appendChild(avgEl);
+    }
+    avgEl.textContent = `Average time: ${formatSecondsToMMSS(avgSeconds)} /question`;
+
+    let totalEl = document.getElementById('total-time');
+    if (!totalEl) {
+      totalEl = document.createElement('div');
+      totalEl.id = 'total-time';
+      totalEl.style.marginTop = '4px';
+      scoreboardContainer.appendChild(totalEl);
+    }
+    totalEl.textContent = `Total time: ${formatSecondsToMMSS(totalElapsed)}`;
     renderScoreboard();
     localStorage.removeItem("quizProgress"); // Clear saved progress after displaying results
   }
@@ -500,14 +623,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const questionCell = document.createElement("td");
       const yourAnswerCell = document.createElement("td");
       const correctAnswerCell = document.createElement("td");
+      const timeCell = document.createElement("td");
 
       questionCell.textContent = `Q${index + 1}: ${answer.question}`;
       yourAnswerCell.textContent = answer.yourAnswer;
       correctAnswerCell.textContent = answer.correctAnswer;
+      const t = questionTimes[index];
+      timeCell.textContent = (t === undefined) ? '' : formatSecondsToMMSS(t);
 
       row.appendChild(questionCell);
       row.appendChild(yourAnswerCell);
       row.appendChild(correctAnswerCell);
+      row.appendChild(timeCell);
       scoreboardBody.appendChild(row);
     });
   }
@@ -516,6 +643,8 @@ document.addEventListener("DOMContentLoaded", () => {
     currentQuestionIndex = 0;
     score = 0;
     userAnswers.length = 0;
+    questionTimes.length = 0;
+    answeredThisQuestion = false;
     scoreElement.textContent = `Score: ${score}`;
     nextButton.textContent = "Continue";
     nextButton.style.display = "block";
@@ -533,6 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tutorialContainer.style.display = 'none';
     quizContainer.style.display = 'none';
     scoreboardContainer.style.display = 'none';
+    if (appStats) updateMenuDabloons(appStats);
   }
 
   function startFromMenu() {
@@ -541,10 +671,13 @@ document.addEventListener("DOMContentLoaded", () => {
     currentQuestionIndex = 0;
     score = 0;
     userAnswers.length = 0;
+    questionTimes.length = 0;
+    answeredThisQuestion = false;
     scoreElement.textContent = `Score: ${score}`;
 
     menuContainer.style.display = 'none';
     quizContainer.style.display = 'block';
+    startQuizTimer();
     loadQuizData();
   }
 
@@ -566,10 +699,35 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   statsButton?.addEventListener('click', () => {
-    loadStats();
+    appStats = loadStats();
     // toggle panel inline on menu
     statsPanel.style.display = statsPanel.style.display === 'none' ? 'block' : 'none';
   });
+
+  storeButton?.addEventListener('click', () => {
+    menuContainer.style.display = 'none';
+    storeContainer.style.display = 'block';
+  });
+
+  storeBack?.addEventListener('click', () => {
+    storeContainer.style.display = 'none';
+    showMenu();
+  });
+
+  function tryPurchase(price) {
+    appStats = appStats || loadStats();
+    const current = appStats.dabloons ?? 0;
+    if (current >= price) {
+      appStats.dabloons = current - price;
+      saveStats(appStats);
+      alert('Compra realizada.');
+    } else {
+      alert('Fondos insuficientes.');
+    }
+  }
+
+  buyCamera?.addEventListener('click', () => tryPurchase(100));
+  buyCandy?.addEventListener('click', () => tryPurchase(10));
 
   tutorialButton?.addEventListener('click', () => {
     menuContainer.style.display = 'none';
@@ -592,10 +750,15 @@ document.addEventListener("DOMContentLoaded", () => {
     showMenu();
   });
 
+  homeButton?.addEventListener('click', () => {
+    scoreboardContainer.style.display = 'none';
+    showMenu();
+  });
+
   nextButton.addEventListener("click", handleNextButtonClick);
 
   // App boot: show menu and preload settings/stats
   loadSettings();
-  loadStats();
+  appStats = loadStats();
   showMenu();
 });
